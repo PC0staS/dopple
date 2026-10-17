@@ -1,12 +1,14 @@
 use crate::models::FileMap;
+use crate::progreso::Progreso;
 use crate::utils::es_ruta_virtual;
 use std::collections::{HashMap, HashSet};
 use std::os::unix::fs::MetadataExt; // ← añade este (te da dev() e ino())
 use std::path::Path;
 
-pub fn explore_files(path: &Path) -> FileMap {
+pub fn explore_files(path: &Path, mut on_progreso: impl FnMut(Progreso)) -> FileMap {
     let mut file_map: FileMap = HashMap::new();
     let mut inodos_vistos: HashSet<(u64, u64)> = HashSet::new();
+    let mut vistos: usize = 0;
 
     for entry in walkdir::WalkDir::new(path)
         .into_iter()
@@ -41,6 +43,11 @@ pub fn explore_files(path: &Path) -> FileMap {
                 // si no existe la clave, se crea un vector vacío y luego se agrega el path del archivo
                 .or_default()
                 .push(file_path);
+
+            vistos += 1;
+            if vistos % 5000 == 0 {
+                on_progreso(Progreso::Escaneando { ficheros: vistos });
+            }
         }
     }
 

@@ -13,8 +13,12 @@ pub struct Resumen {
 }
 
 /// Pipeline completo: recorrer → agrupar → guardar duplicados en la DB.
-pub fn buscar_duplicados(raiz: &Path, ruta_db: &str) -> rusqlite::Result<Resumen> {
-    let file_map = explore_files(raiz);
+pub fn buscar_duplicados(
+    raiz: &Path,
+    ruta_db: &str,
+    on_progreso: impl FnMut(crate::progreso::Progreso),
+) -> rusqlite::Result<Resumen> {
+    let file_map = explore_files(raiz, on_progreso);
     let escaneados = file_map.values().map(|v| v.len()).sum();
 
     let parciales = agrupar_por_parcial(file_map);
