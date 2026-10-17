@@ -1,14 +1,19 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn init_app() {
+    // Create db file if it doesn't exist
+    let home_dir = dirs::home_dir().unwrap();
+    let ruta_db = home_dir.join(".dopple").join("db.sqlite");
+    if !ruta_db.exists() {
+        std::fs::create_dir_all(ruta_db.parent().unwrap()).unwrap();
+        std::fs::File::create(ruta_db).unwrap();
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    init_app();
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
