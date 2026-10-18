@@ -33,6 +33,7 @@ pub async fn buscar_duplicados(app: tauri::AppHandle, raiz: String) -> Result<()
         let mut ultimo_aviso = Instant::now();
         let mut fase_anterior = String::new();
 
+        // |progreso| {} es un callback que se invoca cada vez que hay un cambio de fase o un progreso significativo.
         dopple_core::busqueda::buscar_duplicados(path, &ruta_db, |progreso| {
             let fase = match &progreso {
                 Progreso::Escaneando { .. } => "escaneando",
@@ -66,11 +67,11 @@ pub async fn buscar_duplicados(app: tauri::AppHandle, raiz: String) -> Result<()
 
             let _ = app.emit("progreso", payload);
         })
-        .map(|_| ())
-        .map_err(|e| e.to_string())
+        .map(|_| ()) // Ignoramos el resultado final, que es un `Result<(), String>`; el error ya se emitió por el callback.
+        .map_err(|e| e.to_string()) // Convertimos el error a String para que pueda ser devuelto por la función async.
     })
     .await
-    .map_err(|e| format!("La tarea de escaneo terminó de forma inesperada: {e}"))?
+    .map_err(|e| format!("La tarea de escaneo terminó de forma inesperada: {e}"))? // Convertimos el JoinError a String para que pueda ser devuelto por la función async.
 }
 
 #[tauri::command]
