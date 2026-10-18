@@ -24,69 +24,93 @@ function agruparPorTamano(ficheros: Fichero[]): Grupo[] {
   return grupos
 }
 
+/** Espacio que se recupera si te quedas con una sola copia del grupo. */
+function recuperableDe(grupo: Grupo): number {
+  return grupo.tamano * (grupo.ficheros.length - 1)
+}
+
+/** Parte la ruta en carpeta y nombre, para poder darles pesos visuales distintos. */
+function partirRuta(ruta: string): [string, string] {
+  const corte = ruta.lastIndexOf('/')
+  return corte === -1 ? ['', ruta] : [ruta.slice(0, corte + 1), ruta.slice(corte + 1)]
+}
+
 export default function Table({ ficheros }: { ficheros: Fichero[] }) {
   const grupos = agruparPorTamano(ficheros)
+  const mayorRecuperable = Math.max(1, ...grupos.map(recuperableDe))
 
   return (
-    <div className="overflow-hidden border border-ink-700 bg-ink-900">
-      <div className="max-h-[62vh] overflow-auto">
-        <table className="w-full border-collapse text-left">
-          <thead className="sticky top-0 z-10 bg-ink-850">
-            <tr className="border-b border-ink-700">
-              <th className="px-5 py-3 font-mono text-[10px] font-medium tracking-[0.24em] text-ink-400 uppercase">
-                Ruta
-              </th>
-              <th className="px-5 py-3 text-right font-mono text-[10px] font-medium tracking-[0.24em] text-ink-400 uppercase">
-                Copia
-              </th>
-            </tr>
-          </thead>
+    <div className="border border-edge bg-panel shadow-[0_1px_3px_rgb(0_0_0/0.5)]">
+      <table className="w-full border-collapse text-left">
+        <thead className="sticky top-0 z-10 bg-panel-2">
+          <tr className="border-b border-edge">
+            <th className="px-4 py-2 text-[11px] font-medium text-fg-muted">Ruta</th>
+            <th className="px-4 py-2 text-right text-[11px] font-medium text-fg-muted">Copia</th>
+          </tr>
+        </thead>
 
-          {grupos.map(grupo => {
-            // Espacio que se recupera si te quedas con una sola copia del grupo.
-            const recuperable = grupo.tamano * (grupo.ficheros.length - 1)
+        {grupos.map(grupo => {
+          const recuperable = recuperableDe(grupo)
 
-            return (
-              <tbody
-                key={`${grupo.tamano}-${grupo.ficheros.length}-${rutaDeFichero(grupo.ficheros[0])}`}
-              >
-                <tr className="border-y border-ink-700 bg-ink-850/70">
-                  <th colSpan={2} className="px-5 py-2 text-left">
-                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 font-mono text-[10px] tracking-[0.2em] uppercase">
-                      <span className="text-acid-400">{formatearTamano(grupo.tamano)}</span>
-                      <span className="text-ink-400">{grupo.ficheros.length} copias</span>
-                      {recuperable > 0 && (
-                        <span className="text-amber-300/80">
+          return (
+            <tbody
+              key={`${grupo.tamano}-${grupo.ficheros.length}-${rutaDeFichero(grupo.ficheros[0])}`}
+            >
+              <tr className="border-y border-edge bg-panel-2">
+                <th colSpan={2} className="px-4 py-2 text-left font-normal">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="h-3.5 w-[3px] shrink-0 rounded-full bg-accent"
+                      aria-hidden="true"
+                    />
+                    <span className="font-mono text-[12px] font-semibold text-fg">
+                      {formatearTamano(grupo.tamano)}
+                    </span>
+                    <span className="text-[11px] text-fg-dim">{grupo.ficheros.length} copias</span>
+
+                    {recuperable > 0 && (
+                      <div className="ml-auto flex shrink-0 items-center gap-3">
+                        <span className="hidden font-mono text-[11px] text-accent sm:inline">
                           {formatearTamano(recuperable)} recuperables
                         </span>
-                      )}
-                    </div>
-                  </th>
-                </tr>
-
-                {grupo.ficheros.map((fichero, i) => {
-                  const ruta = rutaDeFichero(fichero)
-                  return (
-                    <tr
-                      key={`${i}-${ruta}`}
-                      className="group border-b border-ink-800 last:border-0 hover:bg-acid-400/5"
-                    >
-                      <td className="px-5 py-2.5">
-                        <span className="block font-mono text-[12.5px] leading-relaxed break-all text-ink-300 group-hover:text-white">
-                          {ruta}
+                        {/* Barra proporcional: de un vistazo, qué grupos desperdician más. */}
+                        <span className="hidden h-1.5 w-32 overflow-hidden rounded-full bg-panel-3 sm:block">
+                          <span
+                            className="block h-full rounded-full bg-accent"
+                            style={{
+                              width: `${Math.max(4, (recuperable / mayorRecuperable) * 100)}%`,
+                            }}
+                          />
                         </span>
-                      </td>
-                      <td className="px-5 py-2.5 text-right font-mono text-[12.5px] whitespace-nowrap text-ink-500">
-                        {i + 1}/{grupo.ficheros.length}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            )
-          })}
-        </table>
-      </div>
+                      </div>
+                    )}
+                  </div>
+                </th>
+              </tr>
+
+              {grupo.ficheros.map((fichero, i) => {
+                const [carpeta, nombre] = partirRuta(rutaDeFichero(fichero))
+                return (
+                  <tr
+                    key={`${i}-${nombre}`}
+                    className="border-b border-edge last:border-0 hover:bg-panel-2/60"
+                  >
+                    <td className="px-4 py-1.5">
+                      <span className="font-mono text-[12px] leading-relaxed break-all">
+                        <span className="text-fg-dim">{carpeta}</span>
+                        <span className="text-fg">{nombre}</span>
+                      </span>
+                    </td>
+                    <td className="px-4 py-1.5 text-right font-mono text-[12px] whitespace-nowrap text-fg-dim">
+                      {i + 1}/{grupo.ficheros.length}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          )
+        })}
+      </table>
     </div>
   )
 }

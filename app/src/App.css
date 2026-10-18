@@ -1,48 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
 @import 'tailwindcss';
 
 /*
- * Paleta base como variables CSS normales. El bloque @theme de abajo las expone a
- * Tailwind, así que `border-ink-700` y `var(--ink-700)` apuntan al mismo color.
+ * Carbón cálido + un único acento cobre. Las variables viven en :root y el bloque @theme
+ * las expone a Tailwind, así que `border-edge` y `var(--edge)` son el mismo valor.
  */
 :root {
-  --ink-950: #07080a;
-  --ink-900: #0b0d10;
-  --ink-850: #101318;
-  --ink-800: #15191e;
-  --ink-700: #1e2429;
-  --ink-600: #2b3238;
-  --ink-500: #414a53;
-  --ink-400: #6d7883;
-  --ink-300: #97a2ad;
-  --ink-200: #c4ccd4;
+  --app: #0f0f11;
+  --panel: #17171a;
+  --panel-2: #1e1e22;
+  --panel-3: #26262b;
+  --fg: #f2f0ec;
+  --fg-muted: #a3a09a;
+  --fg-dim: #6f6c66;
+  --accent: #e8a24a;
+  --accent-hover: #f5b768;
+  --accent-ink: #1a1206;
+  --danger: #f2555a;
+  --edge: rgb(255 255 255 / 0.07);
+  --edge-strong: rgb(255 255 255 / 0.15);
 
-  --acid-300: #dcff7a;
-  --acid-400: #c2f73c;
-  --acid-500: #9dd100;
-
-  --fuente-display: 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --fuente-ui: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
   --fuente-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
 }
 
 @theme {
-  --font-display: var(--fuente-display);
+  --font-sans: var(--fuente-ui);
   --font-mono: var(--fuente-mono);
 
-  --color-ink-950: var(--ink-950);
-  --color-ink-900: var(--ink-900);
-  --color-ink-850: var(--ink-850);
-  --color-ink-800: var(--ink-800);
-  --color-ink-700: var(--ink-700);
-  --color-ink-600: var(--ink-600);
-  --color-ink-500: var(--ink-500);
-  --color-ink-400: var(--ink-400);
-  --color-ink-300: var(--ink-300);
-  --color-ink-200: var(--ink-200);
-
-  --color-acid-300: var(--acid-300);
-  --color-acid-400: var(--acid-400);
-  --color-acid-500: var(--acid-500);
+  --color-app: var(--app);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-panel-3: var(--panel-3);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-dim: var(--fg-dim);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-danger: var(--danger);
+  --color-edge: var(--edge);
+  --color-edge-strong: var(--edge-strong);
 }
 
 @layer base {
@@ -53,101 +51,45 @@
   html,
   body,
   #root {
-    min-height: 100%;
+    height: 100%;
   }
 
   body {
     margin: 0;
-    background-color: var(--ink-950);
-    color: var(--ink-300);
-    font-family: var(--fuente-display);
+    background-color: var(--app);
+    color: var(--fg);
+    font-family: var(--fuente-ui);
+    font-size: 13px;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input {
+    font: inherit;
   }
 
   ::selection {
-    background: var(--acid-400);
-    color: #06080a;
+    background: var(--accent);
+    color: var(--accent-ink);
   }
 
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--ink-950);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--ink-700);
-    border: 2px solid var(--ink-950);
+    background: rgb(255 255 255 / 0.13);
+    border: 3px solid var(--app);
+    border-radius: 99px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--ink-600);
-  }
-}
-
-/* ---------------------------------------------------------------- atmósfera */
-
-.dopple-grid {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
-  background-size: 52px 52px;
-  mask-image: radial-gradient(ellipse 100% 70% at 50% -10%, #000 10%, transparent 75%);
-}
-
-.dopple-glow {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(520px 300px at 6% -10%, rgb(194 247 60 / 0.12), transparent 70%),
-    radial-gradient(640px 360px at 104% 2%, rgb(255 176 32 / 0.07), transparent 72%);
-}
-
-/* --------------------------------------------------------------- animaciones */
-
-@keyframes dopple-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-.dopple-reveal {
-  animation: dopple-reveal 0.65s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-
-@keyframes dopple-sweep {
-  from {
-    transform: translateX(-120%);
-  }
-  to {
-    transform: translateX(520%);
-  }
-}
-
-.dopple-sweep::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgb(194 247 60 / 0.7), transparent);
-  animation: dopple-sweep 1.3s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .dopple-reveal,
-  .dopple-sweep::after {
-    animation: none;
+    background: rgb(255 255 255 / 0.22);
   }
 }

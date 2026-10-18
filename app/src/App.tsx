@@ -31,13 +31,12 @@ const nf = new Intl.NumberFormat('es-ES')
 const POR_PAGINA = 25
 
 const BOTON =
-  'inline-flex items-center justify-center gap-2.5 border px-5 py-3 font-mono text-[11px] font-medium tracking-[0.16em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acid-400 disabled:cursor-not-allowed disabled:opacity-35'
-const BOTON_SECUNDARIO = `${BOTON} border-ink-600 text-ink-200 hover:border-acid-400 hover:text-acid-300`
-const BOTON_PRIMARIO = `${BOTON} border-acid-400 bg-acid-400 font-semibold text-ink-950 hover:border-acid-300 hover:bg-acid-300`
-const BOTON_PELIGRO = `${BOTON} border-red-500/40 text-red-300/90 hover:border-red-400 hover:bg-red-500/10 hover:text-red-200`
+  'inline-flex h-8 shrink-0 items-center justify-center gap-2 rounded-md border px-3 text-[12px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40'
+const BOTON_SECUNDARIO = `${BOTON} border-edge bg-panel-2 text-fg hover:border-edge-strong hover:bg-panel-3 disabled:hover:border-edge disabled:hover:bg-panel-2`
+const BOTON_PRIMARIO = `${BOTON} border-transparent bg-accent text-accent-ink hover:bg-accent-hover disabled:hover:bg-accent`
+const BOTON_PELIGRO = `${BOTON} border-transparent bg-transparent text-danger hover:bg-danger/10 disabled:hover:bg-transparent`
 const BOTON_PAGINA =
-  'inline-flex size-9 items-center justify-center border border-ink-600 text-ink-200 transition-colors hover:border-acid-400 hover:text-acid-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acid-400 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-600 disabled:hover:text-ink-200'
-const PANEL = 'border border-ink-700 bg-ink-900'
+  'inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-edge text-fg-muted transition-colors hover:border-edge-strong hover:bg-panel-2 hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-edge disabled:hover:bg-transparent disabled:hover:text-fg-muted'
 
 function IconoCarpeta() {
   return (
@@ -207,185 +206,169 @@ function App() {
       : null
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden bg-ink-950">
-      <div className="dopple-grid" aria-hidden="true" />
-      <div className="dopple-glow" aria-hidden="true" />
+    <main className="flex h-screen flex-col bg-app text-fg">
+      <header className="flex shrink-0 items-center gap-2.5 border-b border-edge px-5 py-3">
+        <span className="grid size-5 shrink-0 place-items-center rounded-[5px] bg-accent font-mono text-[11px] font-semibold text-accent-ink">
+          D
+        </span>
+        <h1 className="text-[13px] font-semibold tracking-tight">Dopple</h1>
+        <span className="text-[12px] text-fg-dim">Detector de archivos duplicados</span>
+      </header>
 
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-12 sm:px-10">
-        <header className="dopple-reveal flex flex-wrap items-end justify-between gap-6 border-b border-ink-700 pb-7">
-          <div>
-            <h1 className="font-display text-4xl leading-none font-black tracking-tight text-white sm:text-5xl">
-              DOPPLE<span className="text-acid-400">.</span>
-            </h1>
-            <p className="mt-3 font-mono text-[10px] tracking-[0.34em] text-ink-400 uppercase">
-              Detector de archivos duplicados
-            </p>
-          </div>
-          <div className="font-mono text-[11px] tracking-[0.2em] text-ink-400 uppercase">
-            <span className="text-acid-400">{nf.format(pagina.total)}</span> duplicados en índice
-          </div>
-        </header>
+      <section className="shrink-0 border-b border-edge px-5 py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <button type="button" className={BOTON_SECUNDARIO} onClick={seleccionarCarpeta}>
+            <IconoCarpeta />
+            Elegir carpeta
+          </button>
 
-        <section className={`dopple-reveal ${PANEL} p-6 sm:p-7`} style={{ animationDelay: '90ms' }}>
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-stretch">
-            <button type="button" className={BOTON_SECUNDARIO} onClick={seleccionarCarpeta}>
-              <IconoCarpeta />
-              Elegir carpeta
-            </button>
-
-            <div>
-              <div className="flex min-w-0 flex-1 items-center border border-ink-700 bg-ink-950/70 px-4 py-3 font-mono text-[13px]">
-                {ruta ? (
-                  <span className="truncate text-ink-200" title={ruta}>
-                    {ruta}
-                  </span>
-                ) : (
-                  <span className="text-ink-500 italic">sin carpeta seleccionada</span>
-                )}
-              </div>
-              {ruta == '/' && (
-                <span className="ml-2 rounded bg-red-500/10 px-2 py-0.5 text-[11px] font-semibold text-red-400">
-                  ¡Cuidado! Escanear la raíz del disco puede tardar mucho y generar muchos
-                  duplicados.
-                </span>
-              )}
-            </div>
-            <button
-              type="button"
-              className={BOTON_PRIMARIO}
-              onClick={handleBuscarDuplicados}
-              disabled={!ruta || escaneando}
-            >
-              {escaneando ? 'Escaneando…' : 'Buscar duplicados'}
-            </button>
-
-            <button
-              type="button"
-              className={BOTON_PELIGRO}
-              onClick={handleBorrarBaseDeDatos}
-              disabled={pagina.total === 0 || escaneando}
-              title="Borrar todo el índice de duplicados"
-            >
-              <IconoPapelera />
-              Vaciar
-            </button>
-          </div>
-
-          {progreso && (
-            <div className="mt-6 border-t border-ink-700 pt-5">
-              <div className="flex items-baseline justify-between gap-4 font-mono text-[11px] tracking-[0.2em] uppercase">
-                <span className="text-acid-400">
-                  {ETIQUETA_FASE[progreso.fase] ?? progreso.fase}
-                </span>
-                {contador && <span className="text-ink-200">{contador}</span>}
-              </div>
-              <div className="relative mt-4 h-0.75 w-full overflow-hidden bg-ink-800">
-                <div
-                  className={
-                    pct === null
-                      ? 'dopple-sweep relative h-full w-1/4 bg-acid-400'
-                      : 'h-full bg-acid-400 transition-[width] duration-300 ease-out'
-                  }
-                  style={pct === null ? undefined : { width: `${pct}%` }}
-                />
-              </div>
-            </div>
-          )}
-
-          {error && (
-            <p className="mt-5 border border-red-500/40 bg-red-500/10 px-4 py-3 font-mono text-[12px] text-red-300">
-              {error}
-            </p>
-          )}
-        </section>
-
-        <section className="dopple-reveal flex flex-col gap-4" style={{ animationDelay: '180ms' }}>
-          <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-ink-700 pb-3">
-            <h2 className="font-display text-sm font-bold tracking-[0.24em] text-ink-200 uppercase">
-              Resultados
-            </h2>
-
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <label className="flex items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-ink-400 uppercase">
-                Ocultar &lt;
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  value={minMb}
-                  onChange={e => setMinMb(e.target.value)}
-                  placeholder="0"
-                  aria-label="Tamaño mínimo en megabytes"
-                  className="w-14 border border-ink-600 bg-ink-950/70 px-2 py-1 text-center font-mono text-[12px] tracking-normal text-ink-200 normal-case placeholder:text-ink-600 focus:border-acid-400 focus:outline-none"
-                />
-                MB
-                {minMb && (
-                  <button
-                    type="button"
-                    onClick={() => setMinMb('')}
-                    className="text-ink-500 transition-colors hover:text-red-300"
-                    aria-label="Quitar el filtro de tamaño"
-                  >
-                    ✕
-                  </button>
-                )}
-              </label>
-
-              <span className="font-mono text-[11px] text-ink-400">
-                {nf.format(pagina.total)} duplicados
+          <div className="flex h-8 min-w-48 flex-1 items-center rounded-md border border-edge bg-panel px-3">
+            {ruta ? (
+              <span className="truncate font-mono text-[12px] text-fg-muted" title={ruta}>
+                {ruta}
               </span>
-            </div>
+            ) : (
+              <span className="text-[12px] text-fg-dim">Ninguna carpeta seleccionada</span>
+            )}
           </div>
 
+          <button
+            type="button"
+            className={BOTON_PRIMARIO}
+            onClick={handleBuscarDuplicados}
+            disabled={!ruta || escaneando}
+          >
+            {escaneando ? 'Escaneando…' : 'Buscar duplicados'}
+          </button>
+
+          <button
+            type="button"
+            className={BOTON_PELIGRO}
+            onClick={handleBorrarBaseDeDatos}
+            disabled={pagina.total === 0 || escaneando}
+            title="Borrar todo el índice de duplicados"
+          >
+            <IconoPapelera />
+            Vaciar índice
+          </button>
+        </div>
+
+        {ruta == '/' && (
+          <p className="mt-2 rounded-md bg-danger/10 px-3 py-1.5 text-[12px] text-danger">
+            ¡Cuidado! Escanear la raíz del disco puede tardar mucho y generar muchos duplicados.
+          </p>
+        )}
+
+        {progreso && (
+          <div className="mt-3">
+            <div className="flex items-baseline justify-between gap-4 text-[12px]">
+              <span className="text-fg-muted">{ETIQUETA_FASE[progreso.fase] ?? progreso.fase}</span>
+              {contador && <span className="font-mono text-fg-dim">{contador}</span>}
+            </div>
+            <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-panel-3">
+              <div
+                className={
+                  pct === null
+                    ? 'h-full w-full animate-pulse bg-accent'
+                    : 'h-full rounded-full bg-accent transition-[width] duration-200 ease-out'
+                }
+                style={pct === null ? undefined : { width: `${pct}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-[12px] text-danger">{error}</p>
+        )}
+      </section>
+
+      <section className="flex min-h-0 flex-1 flex-col">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-3">
+          <h2 className="text-[11px] font-semibold tracking-[0.08em] text-fg-dim uppercase">
+            Duplicados
+          </h2>
+
+          <label className="flex items-center gap-2 text-[12px] text-fg-muted">
+            Ocultar menores de
+            <input
+              type="text"
+              inputMode="decimal"
+              value={minMb}
+              onChange={e => setMinMb(e.target.value)}
+              placeholder="0"
+              aria-label="Tamaño mínimo en megabytes"
+              className="h-7 w-16 rounded-md border border-edge bg-panel px-2 text-center font-mono text-[12px] text-fg placeholder:text-fg-dim focus:border-accent focus:outline-none"
+            />
+            MB
+            {minMb && (
+              <button
+                type="button"
+                onClick={() => setMinMb('')}
+                className="text-fg-dim transition-colors hover:text-danger"
+                aria-label="Quitar el filtro de tamaño"
+              >
+                ✕
+              </button>
+            )}
+          </label>
+        </div>
+
+        <div className="min-h-0 flex-1 overflow-auto px-5 pb-4">
           {pagina.total === 0 ? (
-            <div className={`${PANEL} flex flex-col items-center gap-3 px-6 py-16 text-center`}>
-              <span className="font-mono text-3xl text-ink-600">∅</span>
-              <p className="font-display text-sm text-ink-400">
+            <div className="flex h-full flex-col items-center justify-center gap-1.5 text-center">
+              <p className="text-[13px] text-fg-muted">
                 {minBytes > 0
-                  ? `Ningún duplicado alcanza ${minMb} MB. Baja el filtro para ver más.`
-                  : 'Sin duplicados en el índice. Elige una carpeta y lanza un escaneo.'}
+                  ? `Ningún duplicado alcanza ${minMb} MB`
+                  : 'Sin duplicados en el índice'}
+              </p>
+              <p className="text-[12px] text-fg-dim">
+                {minBytes > 0
+                  ? 'Baja el filtro para ver más resultados.'
+                  : 'Elige una carpeta y lanza un escaneo para empezar.'}
               </p>
             </div>
           ) : (
-            <>
-              <Table ficheros={pagina.ficheros} />
-
-              <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
-                <span className="font-mono text-[11px] text-ink-400">
-                  mostrando {nf.format(offset + 1)}–
-                  {nf.format(Math.min(offset + POR_PAGINA, pagina.total))} de{' '}
-                  {nf.format(pagina.total)}
-                </span>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className={BOTON_PAGINA}
-                    onClick={() => setOffset(o => Math.max(0, o - POR_PAGINA))}
-                    disabled={offset === 0}
-                    aria-label="Página anterior"
-                  >
-                    <IconoFlecha direccion="izquierda" />
-                  </button>
-
-                  <span className="min-w-20 text-center font-mono text-[11px] tracking-[0.16em] text-ink-200 uppercase">
-                    {paginaActual} / {totalPaginas}
-                  </span>
-
-                  <button
-                    type="button"
-                    className={BOTON_PAGINA}
-                    onClick={() => setOffset(o => o + POR_PAGINA)}
-                    disabled={offset + POR_PAGINA >= pagina.total}
-                    aria-label="Página siguiente"
-                  >
-                    <IconoFlecha direccion="derecha" />
-                  </button>
-                </div>
-              </div>
-            </>
+            <Table ficheros={pagina.ficheros} />
           )}
-        </section>
-      </div>
+        </div>
+
+        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-edge px-5 py-2">
+          <span className="text-[12px] text-fg-dim">
+            {pagina.total === 0
+              ? 'Índice vacío'
+              : `${nf.format(pagina.total)} duplicados · mostrando ${nf.format(offset + 1)}–${nf.format(Math.min(offset + POR_PAGINA, pagina.total))}`}
+          </span>
+
+          {pagina.total > 0 && (
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className={BOTON_PAGINA}
+                onClick={() => setOffset(o => Math.max(0, o - POR_PAGINA))}
+                disabled={offset === 0}
+                aria-label="Página anterior"
+              >
+                <IconoFlecha direccion="izquierda" />
+              </button>
+
+              <span className="min-w-16 text-center font-mono text-[12px] text-fg-muted">
+                {paginaActual} / {totalPaginas}
+              </span>
+
+              <button
+                type="button"
+                className={BOTON_PAGINA}
+                onClick={() => setOffset(o => o + POR_PAGINA)}
+                disabled={offset + POR_PAGINA >= pagina.total}
+                aria-label="Página siguiente"
+              >
+                <IconoFlecha direccion="derecha" />
+              </button>
+            </div>
+          )}
+        </footer>
+      </section>
     </main>
   )
 }
