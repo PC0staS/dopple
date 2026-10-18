@@ -31,12 +31,12 @@ const nf = new Intl.NumberFormat('es-ES')
 const POR_PAGINA = 25
 
 const BOTON =
-  'inline-flex h-8 shrink-0 items-center justify-center gap-2 rounded-md border px-3 text-[12px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40'
+  'inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-md border px-3.5 text-[13.5px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40'
 const BOTON_SECUNDARIO = `${BOTON} border-edge bg-panel-2 text-fg hover:border-edge-strong hover:bg-panel-3 disabled:hover:border-edge disabled:hover:bg-panel-2`
 const BOTON_PRIMARIO = `${BOTON} border-transparent bg-accent text-accent-ink hover:bg-accent-hover disabled:hover:bg-accent`
 const BOTON_PELIGRO = `${BOTON} border-transparent bg-transparent text-danger hover:bg-danger/10 disabled:hover:bg-transparent`
 const BOTON_PAGINA =
-  'inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-edge text-fg-muted transition-colors hover:border-edge-strong hover:bg-panel-2 hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-edge disabled:hover:bg-transparent disabled:hover:text-fg-muted'
+  'inline-flex size-8 shrink-0 items-center justify-center rounded-md border border-edge text-fg-muted transition-colors hover:border-edge-strong hover:bg-panel-2 hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-edge disabled:hover:bg-transparent disabled:hover:text-fg-muted'
 
 function IconoCarpeta() {
   return (
@@ -47,7 +47,7 @@ function IconoCarpeta() {
       strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="size-4 shrink-0"
+      className="size-4.5 shrink-0"
       aria-hidden="true"
     >
       <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h3.1a2 2 0 0 1 1.5.7l1 1.1a2 2 0 0 0 1.5.7h5.9A2.5 2.5 0 0 1 21 10v6.5A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" />
@@ -64,7 +64,7 @@ function IconoPapelera() {
       strokeWidth="1.6"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="size-4 shrink-0"
+      className="size-4.5 shrink-0"
       aria-hidden="true"
     >
       <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12.5A1.5 1.5 0 0 0 8.5 21h7a1.5 1.5 0 0 0 1.5-1.5L18 7M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
@@ -81,7 +81,7 @@ function IconoFlecha({ direccion }: { direccion: 'izquierda' | 'derecha' }) {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className={`size-4 ${direccion === 'izquierda' ? 'rotate-180' : ''}`}
+      className={`size-4.5 ${direccion === 'izquierda' ? 'rotate-180' : ''}`}
       aria-hidden="true"
     >
       <path d="M9 6l6 6-6 6" />
@@ -207,28 +207,28 @@ function App() {
 
   return (
     <main className="flex h-screen flex-col bg-app text-fg">
-      <header className="flex shrink-0 items-center gap-2.5 border-b border-edge px-5 py-3">
-        <span className="grid size-5 shrink-0 place-items-center rounded-[5px] bg-accent font-mono text-[11px] font-semibold text-accent-ink">
+      <header className="flex shrink-0 items-center gap-3 border-b border-edge px-5 py-3.5">
+        <span className="grid size-6 shrink-0 place-items-center rounded-md bg-accent font-mono text-[13px] font-semibold text-accent-ink">
           D
         </span>
-        <h1 className="text-[13px] font-semibold tracking-tight">Dopple</h1>
-        <span className="text-[12px] text-fg-dim">Detector de archivos duplicados</span>
+        <h1 className="text-[15px] font-semibold tracking-tight">Dopple</h1>
+        <span className="text-[13px] text-fg-dim">Detector de archivos duplicados</span>
       </header>
 
-      <section className="shrink-0 border-b border-edge px-5 py-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <section className="shrink-0 border-b border-edge px-5 py-3.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button type="button" className={BOTON_SECUNDARIO} onClick={seleccionarCarpeta}>
             <IconoCarpeta />
             Elegir carpeta
           </button>
 
-          <div className="flex h-8 min-w-48 flex-1 items-center rounded-md border border-edge bg-panel px-3">
+          <div className="flex h-9 min-w-52 flex-1 items-center rounded-md border border-edge bg-panel px-3.5">
             {ruta ? (
-              <span className="truncate font-mono text-[12px] text-fg-muted" title={ruta}>
+              <span className="truncate font-mono text-[13.5px] text-fg-muted" title={ruta}>
                 {ruta}
               </span>
             ) : (
-              <span className="text-[12px] text-fg-dim">Ninguna carpeta seleccionada</span>
+              <span className="text-[13.5px] text-fg-dim">Ninguna carpeta seleccionada</span>
             )}
           </div>
 
@@ -254,18 +254,18 @@ function App() {
         </div>
 
         {ruta == '/' && (
-          <p className="mt-2 rounded-md bg-danger/10 px-3 py-1.5 text-[12px] text-danger">
+          <p className="mt-2.5 rounded-md bg-danger/10 px-3.5 py-2 text-[13px] text-danger">
             ¡Cuidado! Escanear la raíz del disco puede tardar mucho y generar muchos duplicados.
           </p>
         )}
 
         {progreso && (
-          <div className="mt-3">
-            <div className="flex items-baseline justify-between gap-4 text-[12px]">
+          <div className="mt-3.5">
+            <div className="flex items-baseline justify-between gap-4 text-[13px]">
               <span className="text-fg-muted">{ETIQUETA_FASE[progreso.fase] ?? progreso.fase}</span>
               {contador && <span className="font-mono text-fg-dim">{contador}</span>}
             </div>
-            <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-panel-3">
+            <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-panel-3">
               <div
                 className={
                   pct === null
@@ -279,17 +279,19 @@ function App() {
         )}
 
         {error && (
-          <p className="mt-3 rounded-md bg-danger/10 px-3 py-2 text-[12px] text-danger">{error}</p>
+          <p className="mt-3.5 rounded-md bg-danger/10 px-3.5 py-2.5 text-[13px] text-danger">
+            {error}
+          </p>
         )}
       </section>
 
       <section className="flex min-h-0 flex-1 flex-col">
-        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-3">
-          <h2 className="text-[11px] font-semibold tracking-[0.08em] text-fg-dim uppercase">
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-3.5">
+          <h2 className="text-[12px] font-semibold tracking-[0.08em] text-fg-dim uppercase">
             Duplicados
           </h2>
 
-          <label className="flex items-center gap-2 text-[12px] text-fg-muted">
+          <label className="flex items-center gap-2.5 text-[13px] text-fg-muted">
             Ocultar menores de
             <input
               type="text"
@@ -298,7 +300,7 @@ function App() {
               onChange={e => setMinMb(e.target.value)}
               placeholder="0"
               aria-label="Tamaño mínimo en megabytes"
-              className="h-7 w-16 rounded-md border border-edge bg-panel px-2 text-center font-mono text-[12px] text-fg placeholder:text-fg-dim focus:border-accent focus:outline-none"
+              className="h-8 w-20 rounded-md border border-edge bg-panel px-2 text-center font-mono text-[13.5px] text-fg placeholder:text-fg-dim focus:border-accent focus:outline-none"
             />
             MB
             {minMb && (
@@ -314,15 +316,15 @@ function App() {
           </label>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-auto px-5 pb-4">
+        <div className="min-h-0 flex-1 overflow-auto px-5 pb-5">
           {pagina.total === 0 ? (
-            <div className="flex h-full flex-col items-center justify-center gap-1.5 text-center">
-              <p className="text-[13px] text-fg-muted">
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+              <p className="text-[15px] text-fg-muted">
                 {minBytes > 0
                   ? `Ningún duplicado alcanza ${minMb} MB`
                   : 'Sin duplicados en el índice'}
               </p>
-              <p className="text-[12px] text-fg-dim">
+              <p className="text-[13.5px] text-fg-dim">
                 {minBytes > 0
                   ? 'Baja el filtro para ver más resultados.'
                   : 'Elige una carpeta y lanza un escaneo para empezar.'}
@@ -333,8 +335,8 @@ function App() {
           )}
         </div>
 
-        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-edge px-5 py-2">
-          <span className="text-[12px] text-fg-dim">
+        <footer className="flex shrink-0 items-center justify-between gap-4 border-t border-edge px-5 py-2.5">
+          <span className="text-[13px] text-fg-dim">
             {pagina.total === 0
               ? 'Índice vacío'
               : `${nf.format(pagina.total)} duplicados · mostrando ${nf.format(offset + 1)}–${nf.format(Math.min(offset + POR_PAGINA, pagina.total))}`}
@@ -352,7 +354,7 @@ function App() {
                 <IconoFlecha direccion="izquierda" />
               </button>
 
-              <span className="min-w-16 text-center font-mono text-[12px] text-fg-muted">
+              <span className="min-w-20 text-center font-mono text-[13px] text-fg-muted">
                 {paginaActual} / {totalPaginas}
               </span>
 
