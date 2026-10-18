@@ -61,10 +61,18 @@ impl Escritor {
         Ok(n)
     }
 
-    pub fn contar_filas(ruta_db: &str) -> i64 {
-        let c = Connection::open(ruta_db).unwrap();
-        c.query_row("SELECT COUNT(*) FROM archivos", [], |r| r.get(0))
-            .unwrap()
+    /// Cuenta las filas de `archivos` que alcanzan `tamano_min` bytes.
+    /// Devuelve 0 si la tabla todavía no existe (por ejemplo, justo después de `drop_db`).
+    pub fn contar_filas(ruta_db: &str, tamano_min: u64) -> i64 {
+        let Ok(c) = Connection::open(ruta_db) else {
+            return 0;
+        };
+        c.query_row(
+            "SELECT COUNT(*) FROM archivos WHERE tamaño >= ?1",
+            [tamano_min as i64],
+            |r| r.get(0),
+        )
+        .unwrap_or(0)
     }
 
     pub fn drop_db(&mut self) -> rusqlite::Result<()> {
@@ -87,4 +95,34 @@ pub fn guardar_duplicados(completos: &GrupoCompleto, ruta_db: &str) -> rusqlite:
         }
     }
     esc.guardar(lote)
+}
+
+/// Página del índice de duplicados.
+///
+/// Ordena por tamaño descendente para que los duplicados que más espacio ocupan
+/// salgan primero. `tamano_min` (en bytes) descarta lo que no llega al umbral, y
+/// `LIMIT`/`OFFSET` se resuelven en SQL: el frontend nunca recibe miles de filas de golpe.
+pub fn get_ficheros_pagina(
+    ruta_db: &str,
+    offset: u64,
+    limite: u64,
+    tamano_min: u64,
+) -> rusqlite::Result<Vec<Fichero>> {
+    let c = Connection::open(ruta_db)?;
+    let mut stmt = c.prepare(
+        "SELECT ruta, tamaño FROM archivos
+         WHERE tamaño >= ?1
+         ORDER BY tamaño DESC, ruta ASC
+         LIMIT ?2 OFFSET ?3",
+    )?;
+    let ficheros_iter = stmt.query_map(
+        rusqlite::params![tamano_min as i64, limite as i64, offset as i64],
+        |row| Ok((row.get::<_, Vec<u8>>(0)?, row.get::<_, i64>(1)? as u64)),
+    )?;
+
+    let mut ficheros = Vec::new();
+    for f in ficheros_iter {
+        ficheros.push(f?);
+    }
+    Ok(ficheros)
 }

@@ -16,13 +16,13 @@ pub struct Resumen {
 pub fn buscar_duplicados(
     raiz: &Path,
     ruta_db: &str,
-    on_progreso: impl FnMut(crate::progreso::Progreso),
+    mut on_progreso: impl FnMut(crate::progreso::Progreso),
 ) -> rusqlite::Result<Resumen> {
-    let file_map = explore_files(raiz, on_progreso);
+    let file_map = explore_files(raiz, &mut on_progreso);
     let escaneados = file_map.values().map(|v| v.len()).sum();
 
-    let parciales = agrupar_por_parcial(file_map);
-    let completos: GrupoCompleto = agrupar_por_completo(parciales);
+    let parciales = agrupar_por_parcial(file_map, &mut on_progreso);
+    let completos: GrupoCompleto = agrupar_por_completo(parciales, &mut on_progreso);
 
     let grupos_dup = completos.values().filter(|v| v.len() > 1).count();
     let ficheros_dup = completos
