@@ -37,7 +37,7 @@ const BOTON_PRIMARIO = `${BOTON} border-acid-400 bg-acid-400 font-semibold text-
 const BOTON_PELIGRO = `${BOTON} border-red-500/40 text-red-300/90 hover:border-red-400 hover:bg-red-500/10 hover:text-red-200`
 const BOTON_PAGINA =
   'inline-flex size-9 items-center justify-center border border-ink-600 text-ink-200 transition-colors hover:border-acid-400 hover:text-acid-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acid-400 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-600 disabled:hover:text-ink-200'
-const PANEL = 'border border-ink-700 bg-ink-900/90 backdrop-blur-sm'
+const PANEL = 'border border-ink-700 bg-ink-900'
 
 function IconoCarpeta() {
   return (

@@ -28,10 +28,10 @@ export default function Table({ ficheros }: { ficheros: Fichero[] }) {
   const grupos = agruparPorTamano(ficheros)
 
   return (
-    <div className="overflow-hidden border border-ink-700 bg-ink-900/90 backdrop-blur-sm">
+    <div className="overflow-hidden border border-ink-700 bg-ink-900">
       <div className="max-h-[62vh] overflow-auto">
         <table className="w-full border-collapse text-left">
-          <thead className="sticky top-0 z-10 bg-ink-850/95 backdrop-blur">
+          <thead className="sticky top-0 z-10 bg-ink-850">
             <tr className="border-b border-ink-700">
               <th className="px-5 py-3 font-mono text-[10px] font-medium tracking-[0.24em] text-ink-400 uppercase">
                 Ruta
@@ -69,10 +69,10 @@ export default function Table({ ficheros }: { ficheros: Fichero[] }) {
                   return (
                     <tr
                       key={`${i}-${ruta}`}
-                      className="group border-b border-ink-800 transition-colors last:border-0 hover:bg-acid-400/5"
+                      className="group border-b border-ink-800 last:border-0 hover:bg-acid-400/5"
                     >
                       <td className="px-5 py-2.5">
-                        <span className="block font-mono text-[12.5px] leading-relaxed break-all text-ink-300 transition-colors group-hover:text-white">
+                        <span className="block font-mono text-[12.5px] leading-relaxed break-all text-ink-300 group-hover:text-white">
                           {ruta}
                         </span>
                       </td>
